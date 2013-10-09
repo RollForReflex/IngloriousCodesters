@@ -1,4 +1,4 @@
 IngloriousCodesters
 ===================
 
-HackVT IngloriousCodesters project
+HackVT IngloriousCodesters project - First Commit
