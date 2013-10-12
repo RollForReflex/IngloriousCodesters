@@ -18,6 +18,12 @@ namespace ViewBoost
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "Provider",
+                url: "{controller}/{action}",
+                defaults: new { controller = "Provider", action = "Index" }
+            );
         }
     }
 }
