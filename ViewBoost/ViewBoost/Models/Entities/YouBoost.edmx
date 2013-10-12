@@ -1,0 +1,432 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="YouBoostDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="YouBoostDBModelStoreContainer">
+          <EntitySet Name="Cards" EntityType="YouBoostDBModel.Store.Cards" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CheckinTransaction" EntityType="YouBoostDBModel.Store.CheckinTransaction" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="DonationTransactions" EntityType="YouBoostDBModel.Store.DonationTransactions" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Donators" EntityType="YouBoostDBModel.Store.Donators" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Providers" EntityType="YouBoostDBModel.Store.Providers" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Receivers" EntityType="YouBoostDBModel.Store.Receivers" store:Type="Tables" store:Schema="dbo" store:Name="Receivers">
+            <DefiningQuery>SELECT 
+      [Receivers].[id] AS [id], 
+      [Receivers].[name] AS [name], 
+      [Receivers].[cardId] AS [cardId]
+      FROM [dbo].[Receivers] AS [Receivers]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="relProviders_Services" EntityType="YouBoostDBModel.Store.relProviders_Services" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Services" EntityType="YouBoostDBModel.Store.Services" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Subscriptions" EntityType="YouBoostDBModel.Store.Subscriptions" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Types" EntityType="YouBoostDBModel.Store.Types" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_DonationTransactions_Types" Association="YouBoostDBModel.Store.FK_DonationTransactions_Types">
+            <End Role="Types" EntitySet="Types" />
+            <End Role="DonationTransactions" EntitySet="DonationTransactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_relProviders_Services_providers" Association="YouBoostDBModel.Store.FK_relProviders_Services_providers">
+            <End Role="Providers" EntitySet="Providers" />
+            <End Role="relProviders_Services" EntitySet="relProviders_Services" />
+          </AssociationSet>
+          <AssociationSet Name="FK_relProviders_Services_Services" Association="YouBoostDBModel.Store.FK_relProviders_Services_Services">
+            <End Role="Services" EntitySet="Services" />
+            <End Role="relProviders_Services" EntitySet="relProviders_Services" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscriptions_Types" Association="YouBoostDBModel.Store.FK_Subscriptions_Types">
+            <End Role="Types" EntitySet="Types" />
+            <End Role="Subscriptions" EntitySet="Subscriptions" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Cards">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CheckinTransaction">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="providerId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="receiverId" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DonationTransactions">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="donatorId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="goingToId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="type" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Donators">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Providers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="250" />
+          <Property Name="address" Type="nvarchar(max)" />
+          <Property Name="phoneNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="url" Type="nvarchar" MaxLength="50" />
+          <Property Name="description" Type="nvarchar" MaxLength="250" />
+          <Property Name="hoursOfOperation" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'YouBoostDB.dbo.Receivers' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="Receivers">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="cardId" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="relProviders_Services">
+          <Key>
+            <PropertyRef Name="providerId" />
+            <PropertyRef Name="serviceId" />
+          </Key>
+          <Property Name="providerId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="serviceId" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Services">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" />
+          <Property Name="description" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="Subscriptions">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="donatorId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="receiverId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="type" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Types">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_DonationTransactions_Types">
+          <End Role="Types" Type="YouBoostDBModel.Store.Types" Multiplicity="1" />
+          <End Role="DonationTransactions" Type="YouBoostDBModel.Store.DonationTransactions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Types">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="DonationTransactions">
+              <PropertyRef Name="type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_relProviders_Services_providers">
+          <End Role="Providers" Type="YouBoostDBModel.Store.Providers" Multiplicity="1" />
+          <End Role="relProviders_Services" Type="YouBoostDBModel.Store.relProviders_Services" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Providers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="relProviders_Services">
+              <PropertyRef Name="providerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_relProviders_Services_Services">
+          <End Role="Services" Type="YouBoostDBModel.Store.Services" Multiplicity="1" />
+          <End Role="relProviders_Services" Type="YouBoostDBModel.Store.relProviders_Services" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Services">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="relProviders_Services">
+              <PropertyRef Name="serviceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subscriptions_Types">
+          <End Role="Types" Type="YouBoostDBModel.Store.Types" Multiplicity="1" />
+          <End Role="Subscriptions" Type="YouBoostDBModel.Store.Subscriptions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Types">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Subscriptions">
+              <PropertyRef Name="type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="YouBoostDBModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="YouBoostDBEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Cards" EntityType="YouBoostDBModel.Card" />
+          <EntitySet Name="CheckinTransactions" EntityType="YouBoostDBModel.CheckinTransaction" />
+          <EntitySet Name="DonationTransactions" EntityType="YouBoostDBModel.DonationTransaction" />
+          <EntitySet Name="Donators" EntityType="YouBoostDBModel.Donator" />
+          <EntitySet Name="Providers" EntityType="YouBoostDBModel.Provider" />
+          <EntitySet Name="Receivers" EntityType="YouBoostDBModel.Receiver" />
+          <EntitySet Name="Services" EntityType="YouBoostDBModel.Service" />
+          <EntitySet Name="Subscriptions" EntityType="YouBoostDBModel.Subscription" />
+          <EntitySet Name="Types" EntityType="YouBoostDBModel.Type" />
+          <AssociationSet Name="FK_DonationTransactions_Types" Association="YouBoostDBModel.FK_DonationTransactions_Types">
+            <End Role="Types" EntitySet="Types" />
+            <End Role="DonationTransactions" EntitySet="DonationTransactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscriptions_Types" Association="YouBoostDBModel.FK_Subscriptions_Types">
+            <End Role="Types" EntitySet="Types" />
+            <End Role="Subscriptions" EntitySet="Subscriptions" />
+          </AssociationSet>
+          <AssociationSet Name="relProviders_Services" Association="YouBoostDBModel.relProviders_Services">
+            <End Role="Providers" EntitySet="Providers" />
+            <End Role="Services" EntitySet="Services" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Card">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CheckinTransaction">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="providerId" Type="Guid" Nullable="false" />
+          <Property Name="receiverId" Type="Guid" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DonationTransaction">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="donatorId" Type="Guid" Nullable="false" />
+          <Property Name="goingToId" Type="Guid" Nullable="false" />
+          <Property Name="type" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Type1" Relationship="YouBoostDBModel.FK_DonationTransactions_Types" FromRole="DonationTransactions" ToRole="Types" />
+        </EntityType>
+        <EntityType Name="Donator">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Provider">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="address" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="phoneNumber" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="url" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="hoursOfOperation" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Services" Relationship="YouBoostDBModel.relProviders_Services" FromRole="Providers" ToRole="Services" />
+        </EntityType>
+        <EntityType Name="Receiver">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="cardId" Type="Guid" />
+        </EntityType>
+        <EntityType Name="Service">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Providers" Relationship="YouBoostDBModel.relProviders_Services" FromRole="Services" ToRole="Providers" />
+        </EntityType>
+        <EntityType Name="Subscription">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="donatorId" Type="Guid" Nullable="false" />
+          <Property Name="receiverId" Type="Guid" Nullable="false" />
+          <Property Name="type" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Type1" Relationship="YouBoostDBModel.FK_Subscriptions_Types" FromRole="Subscriptions" ToRole="Types" />
+        </EntityType>
+        <EntityType Name="Type">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="DonationTransactions" Relationship="YouBoostDBModel.FK_DonationTransactions_Types" FromRole="Types" ToRole="DonationTransactions" />
+          <NavigationProperty Name="Subscriptions" Relationship="YouBoostDBModel.FK_Subscriptions_Types" FromRole="Types" ToRole="Subscriptions" />
+        </EntityType>
+        <Association Name="FK_DonationTransactions_Types">
+          <End Role="Types" Type="YouBoostDBModel.Type" Multiplicity="1" />
+          <End Role="DonationTransactions" Type="YouBoostDBModel.DonationTransaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Types">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="DonationTransactions">
+              <PropertyRef Name="type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subscriptions_Types">
+          <End Role="Types" Type="YouBoostDBModel.Type" Multiplicity="1" />
+          <End Role="Subscriptions" Type="YouBoostDBModel.Subscription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Types">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Subscriptions">
+              <PropertyRef Name="type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="relProviders_Services">
+          <End Role="Providers" Type="YouBoostDBModel.Provider" Multiplicity="*" />
+          <End Role="Services" Type="YouBoostDBModel.Service" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="YouBoostDBModelStoreContainer" CdmEntityContainer="YouBoostDBEntities">
+          <EntitySetMapping Name="Cards">
+            <EntityTypeMapping TypeName="YouBoostDBModel.Card">
+              <MappingFragment StoreEntitySet="Cards">
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CheckinTransactions">
+            <EntityTypeMapping TypeName="YouBoostDBModel.CheckinTransaction">
+              <MappingFragment StoreEntitySet="CheckinTransaction">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="providerId" ColumnName="providerId" />
+                <ScalarProperty Name="receiverId" ColumnName="receiverId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DonationTransactions">
+            <EntityTypeMapping TypeName="YouBoostDBModel.DonationTransaction">
+              <MappingFragment StoreEntitySet="DonationTransactions">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="donatorId" ColumnName="donatorId" />
+                <ScalarProperty Name="goingToId" ColumnName="goingToId" />
+                <ScalarProperty Name="type" ColumnName="type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Donators">
+            <EntityTypeMapping TypeName="YouBoostDBModel.Donator">
+              <MappingFragment StoreEntitySet="Donators">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Providers">
+            <EntityTypeMapping TypeName="YouBoostDBModel.Provider">
+              <MappingFragment StoreEntitySet="Providers">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="phoneNumber" ColumnName="phoneNumber" />
+                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="hoursOfOperation" ColumnName="hoursOfOperation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Receivers">
+            <EntityTypeMapping TypeName="YouBoostDBModel.Receiver">
+              <MappingFragment StoreEntitySet="Receivers">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="cardId" ColumnName="cardId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Services">
+            <EntityTypeMapping TypeName="YouBoostDBModel.Service">
+              <MappingFragment StoreEntitySet="Services">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subscriptions">
+            <EntityTypeMapping TypeName="YouBoostDBModel.Subscription">
+              <MappingFragment StoreEntitySet="Subscriptions">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="donatorId" ColumnName="donatorId" />
+                <ScalarProperty Name="receiverId" ColumnName="receiverId" />
+                <ScalarProperty Name="type" ColumnName="type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Types">
+            <EntityTypeMapping TypeName="YouBoostDBModel.Type">
+              <MappingFragment StoreEntitySet="Types">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="relProviders_Services" TypeName="YouBoostDBModel.relProviders_Services" StoreEntitySet="relProviders_Services">
+            <EndProperty Name="Providers">
+              <ScalarProperty Name="id" ColumnName="providerId" />
+            </EndProperty>
+            <EndProperty Name="Services">
+              <ScalarProperty Name="id" ColumnName="serviceId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
